@@ -67,5 +67,5 @@ Raspberry Pi Pico拡張機能が追加済みであれば、以下のようにイ
 ## HATとPicoの接続表
 
 以下がRaspberry Pi HAT/拡張基板用の40ピンコネクターとPicoの接続表です。
-GP4、GP5は3V3に1.8kΩでプルアップされています。
+GP4、GP5は3V3に10kΩでプルアップされています。
 ![pin-connection](imgs/pin-connection.png)
