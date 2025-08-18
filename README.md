@@ -19,6 +19,7 @@
 | [pir](pir) | 人感センサー | [RPZ-PIRS](https://www.indoorcorgielec.com/products/rpz-pirs/) |
 | [relay](relay) | リレー | [RPZ-CO2-Sensor](https://www.indoorcorgielec.com/products/rpz-co2-sensor/) |
 | [lcdaqm](lcdaqm) | LCDディスプレイ | [RPi TPH Monitor](https://www.indoorcorgielec.com/products/rpi-tph-monitor-rev2/) |
+| [tmc5240](tmc5240) | ステッピングモーター | [RPZ-Stepper](https://www.indoorcorgielec.com/products/rpz-stepper/) |
 
 
 ## 使い方
