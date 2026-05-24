@@ -5,13 +5,18 @@ Raspberry Pi Pico2W で赤外線リモコンを扱うため、
 ハードウェアには以下を使用しています：
 
 RPZ-IR-Sensor Rev2（Indoor Corgi 様）
+
 RPP-HAT-Adapter
+
 
 ライブラリは、Indoor Corgi 様が公開されている以下のファイルを利用しています：
 
 infrared.h
+
 infrared.c
+
 infrared.pio.h（ビルド時に生成される）
+
 
 これらのファイルの著作権は、すべて製作元様に帰属します。
 
