@@ -5,18 +5,18 @@ Raspberry Pi Pico2W で赤外線リモコンを扱うため、
 ハードウェアには以下を使用しています：
 
 
-RPZ-IR-Sensor Rev2（Indoor Corgi 様）
+・RPZ-IR-Sensor Rev2（Indoor Corgi 様）
 
-RPP-HAT-Adapter
+・RPP-HAT-Adapter
 
 
 ライブラリは、Indoor Corgi 様が公開されている以下のファイルを利用しています：
 
-infrared.h
+・infrared.h
 
-infrared.c
+・infrared.c
 
-infrared.pio.h（ビルド時に生成される）
+・infrared.pio.h（ビルド時に生成される）
 
 
 これらのファイルの著作権は、すべて製作元様に帰属します。
@@ -44,9 +44,9 @@ MicroPython から赤外線送受信が利用可能になります。
 
 sample フォルダにある以下のサンプルを参考にしてください：
 
-ir_receive.py（赤外線受信）
+・ir_receive.py（赤外線受信）
 
-ir_send.py（赤外線送信）
+・ir_send.py（赤外線送信）
 
 MicroPython から操作できるため、
 赤外線リモコンの扱いが大幅に簡単になります。
