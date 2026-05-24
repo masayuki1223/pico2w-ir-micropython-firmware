@@ -46,7 +46,7 @@ while True:
     # Wi-Fi が切れていたら復帰
     if not wlan.isconnected():
         ensure_wifi()
-        ir.init()  # ← ここだけ追加
+        ir.init()
 
     wdt.feed()
 
