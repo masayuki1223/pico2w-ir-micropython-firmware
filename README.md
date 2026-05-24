@@ -4,6 +4,7 @@ Raspberry Pi Pico2W で赤外線リモコンを扱うため、
 
 ハードウェアには以下を使用しています：
 
+
 RPZ-IR-Sensor Rev2（Indoor Corgi 様）
 
 RPP-HAT-Adapter
