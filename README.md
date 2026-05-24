@@ -45,6 +45,7 @@ MicroPython から赤外線送受信が利用可能になります。
 sample フォルダにある以下のサンプルを参考にしてください：
 
 ir_receive.py（赤外線受信）
+
 ir_send.py（赤外線送信）
 
 MicroPython から操作できるため、
