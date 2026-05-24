@@ -8,9 +8,9 @@ from machine import WDT
 wdt = WDT(timeout=8000)  # 8秒
 
 # ===== Wi-Fi 設定 =====
-ssid = "***REMOVED***"
-password = "***REMOVED***"
-STATIC_IP = ("192.168.0.203", "255.255.255.0", "192.168.0.1", "192.168.0.1")# 固定IP設定
+ssid = "xxxxxxxxxxxxxxxxxxxx"
+password = "xxxxxxxxxxxxxxxxxx"
+STATIC_IP = ("192.168.0.xxx", "255.255.255.0", "192.168.0.1", "192.168.0.1")# 固定IP設定
 
 # ===== Wi-Fi インターフェース =====
 wlan = network.WLAN(network.STA_IF)
