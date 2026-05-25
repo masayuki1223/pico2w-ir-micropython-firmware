@@ -67,7 +67,7 @@ ir_off = [...]
 
 Pico2W は TCP サーバとして動作し、
 
-Zero2W や Raspberry Pi OS から以下のようなコマンドを受け取ります：
+PC や Raspberry Pi OS から以下のようなコマンドを受け取ります：
 
 COOL27
 
@@ -78,6 +78,12 @@ OFF
 受信後、対応する IR パルスを送信し、
 
 完了すると制御側へ /success を返します。
+
+コマンドラインから確認する場合は
+
+echo "IR:COOL25" | nc 192.168.0.203 5000
+
+のように入力します。OKが返り、赤外線送信が開始されます。
 
 5. 🖥 Raspberry Pi OS からの操作（UI あり）
 
@@ -99,7 +105,7 @@ aircon_panel.py が必要とする pip パッケージは、
 
 申し訳ありませんが 各自でインストールをお願いします。
 
-（FastAPI / uvicorn / requests あたりが必要になります）
+（FastAPI / uvicorn / requests あたりが必要になります。仮想環境の使用も必要です。）
 
 7. 📁 フォルダ構成例
 
