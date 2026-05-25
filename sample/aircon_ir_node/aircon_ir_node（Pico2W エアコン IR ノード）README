@@ -112,3 +112,9 @@ raspberrypi/
 ├─ aircon_panel.py
 
 └─ aircon_panel.service
+
+8. ⚠️  注意事項とバグ
+
+このプログラムは完全な動作は確認できていません。
+
+既知のバグ：時間経過で動かなくなる。原因調査中。
