@@ -85,9 +85,7 @@ OFF
 
 Raspberry Pi OS（Zero2W / Pi3 / Pi4 / Pi5 など）を用意すると操作画面を持たせることができます。
 
-■ aircon_panel.py を同じネットワークに設置
-
-Raspberry Pi OS に aircon_panel.py を配置
+同じネットワークに設置したRaspberry Pi OS に aircon_panel.py を配置
 
 systemd サービスとして常駐させる
 
