@@ -1,0 +1,116 @@
+📘 aircon_ir_node（Pico2W エアコン IR ノード）README
+
+aircon_ir_node.py は、Raspberry Pi Pico2W を Wi‑Fi 経由で動作するエアコン赤外線リモコンノードとして利用するためのプログラムです。
+
+このノードは、Zero2W や Raspberry Pi OS を搭載した別デバイスから TCP 経由で操作できます。
+
+1. 🔧 必要な準備
+
+■ ① カスタム MicroPython ファームウェアを書き込む（必須）
+
+Pico2W で赤外線送受信を行うため、
+
+Indoor Corgi 様の IR ライブラリを組み込んだ カスタム MicroPython が必要です。
+
+ビルド方法は別 README（firmware 版）を参照してください。
+
+生成された firmware.uf2 を Pico2W にコピーして書き込みます。
+
+■ ② ファイルを配置する
+
+Pico2W のストレージに以下を配置します：
+
+main.py        ← aircon_ir_node.py をリネーム
+
+pulses.py      ← 赤外線パルスデータ
+
+aircon_ir_node.py は 必ず main.py にリネームしてください。
+
+Pico2W 起動時に自動実行されます。
+
+■ ③ Wi‑Fi 設定を行う
+
+main.py 内の以下を編集：
+
+SSID = "your-ssid"
+
+PASSWORD = "your-password"
+
+■ ④ Pico2W に固定 IP を割り当てる（重要）
+
+Zero2W や Raspberry Pi OS 側から Pico2W に TCP 接続するため、
+ルーター側で DHCP 予約または固定 IP を設定してください。
+
+固定 IP がないと制御側が Pico2W を見つけられません。
+
+2. 📡 pulses.py の準備
+
+pulses.py には、エアコンの赤外線パルスデータを以下のように記述します：
+
+ir_cool27 = [...]
+
+ir_heat25 = [...]
+
+ir_off = [...]
+
+これらの配列には、ir_receive.py で受信したパルスデータをそのまま貼り付けてください。
+
+3. 🧪 動作確認（強く推奨）
+
+本番運用の前に、必ず以下を行ってください：
+
+✔ ir_send.py でエアコンが反応するか確認する
+
+受信したパルスデータが正しいかどうかをチェックできます。
+
+4. 🚀 aircon_ir_node の動作
+
+Pico2W は TCP サーバとして動作し、
+
+Zero2W や Raspberry Pi OS から以下のようなコマンドを受け取ります：
+
+COOL27
+
+HEAT25
+
+OFF
+
+受信後、対応する IR パルスを送信し、
+
+完了すると制御側へ /success を返します。
+
+5. 🖥 Raspberry Pi OS からの操作（UI あり）
+
+コマンドラインから直接操作できますが、
+
+Raspberry Pi OS（Zero2W / Pi3 / Pi4 / Pi5 など）を用意すると操作画面を持たせることができます。
+
+■ aircon_panel.py を同じネットワークに設置
+
+Raspberry Pi OS に aircon_panel.py を配置
+
+systemd サービスとして常駐させる
+
+サービスファイルの例は aircon_panel.service に記載しています。
+
+6. 📦 必要な Python パッケージについて
+
+aircon_panel.py が必要とする pip パッケージは、
+
+申し訳ありませんが 各自でインストールをお願いします。
+
+（FastAPI / uvicorn / requests あたりが必要になります）
+
+7. 📁 フォルダ構成例
+
+pico/
+
+├─ main.py          ← aircon_ir_node.py をリネーム
+
+└─ pulses.py
+
+raspberrypi/
+
+├─ aircon_panel.py
+
+└─ aircon_panel.service
