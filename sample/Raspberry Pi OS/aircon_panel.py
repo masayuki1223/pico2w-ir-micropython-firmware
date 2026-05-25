@@ -48,7 +48,7 @@ def index():
         <script>
         const msg = document.getElementById("msg");
 
-        // SSE で Zero2W からの通知を受け取る
+        // SSE で Pico2W からの通知を受け取る
         const evt = new EventSource("/events");
         evt.onmessage = function(e) {{
             if (e.data === "SUCCESS") {{
