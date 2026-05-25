@@ -4,6 +4,7 @@ import time
 import ir
 from pulses import HEAT_25, COOL_25, FAN_LOW, POWER_OFF
 from machine import WDT
+from machine import Pin
 
 # ===== 設定 =====
 SSID = "xxxxxxxxxxxxxxxx"
@@ -13,6 +14,9 @@ PORT = 5000
 
 wdt = WDT(timeout=8000)
 wlan = network.WLAN(network.STA_IF)
+
+led = Pin("LED", Pin.OUT)
+led.off()
 
 # 処理中フラグ & 保留コマンド
 processing = False
@@ -126,6 +130,7 @@ def process_pending():
         return
 
     print("IR start:", mode, "to", pending_ip)
+    led.on()
 
     # Wi-Fi OFF → IR → Wi-Fi ON
     wifi_safe_off()
@@ -153,6 +158,7 @@ def process_pending():
     notify_zero2w(pending_ip)
 
     print("IR done:", mode)
+    led.off()
 
     # 処理完了
     processing = False
@@ -165,6 +171,7 @@ while True:
 
     # まず重い処理（保留コマンド）を進める
     process_pending()
+    led.off()
 
     # 受信ループ（軽量）
     try:
