@@ -8,26 +8,33 @@ from machine import WDT
 wdt = WDT(timeout=8000)  # 8秒
 
 # ===== Wi-Fi 設定 =====
-ssid = "xxxxxxxxxxxxxxxxxxxx"
-password = "xxxxxxxxxxxxxxxxxx"
-STATIC_IP = ("192.168.0.xxx", "255.255.255.0", "192.168.0.1", "192.168.0.1")# 固定IP設定
+ssid = "***REMOVED***"
+password = "***REMOVED***"
+STATIC_IP = ("192.168.0.203", "255.255.255.0", "192.168.0.1", "192.168.0.1")# 固定IP設定
 
 # ===== Wi-Fi インターフェース =====
 wlan = network.WLAN(network.STA_IF)
 
 def ensure_wifi():
-    if not wlan.isconnected():
-        print("Wi-Fi disconnected. Reconnecting...")
+    wlan.active(False)
+    time.sleep(0.3)   # ← CYW43439 の内部リセットに必要な待ち時間
+
+    wlan.active(True)
+    time.sleep(0.1)
+    
+    wlan.ifconfig(STATIC_IP)
+
+    wlan.connect(ssid, password)
+
+    for _ in range(20):
+        if wlan.isconnected():
+            print("Wi-Fi connected:", wlan.ifconfig()[0])
+            return True
+        time.sleep(0.5)
         wdt.feed()
-        wlan.active(True)
-        wlan.ifconfig(("192.168.0.203", "255.255.255.0", "192.168.0.1", "192.168.0.1"))
-        wlan.connect(ssid, password)
-        for _ in range(20):
-            if wlan.isconnected():
-                print("Reconnected:", wlan.ifconfig()[0])
-                return
-            time.sleep(0.5)
-        print("Reconnect failed.")
+
+    print("Wi-Fi connect failed")
+    return False
 
 # 初回接続
 ensure_wifi()
