@@ -2,6 +2,7 @@ import network
 import socket
 import time
 import ir
+from config import SSID, PASS
 from pulses import HEAT_25, COOL_25, FAN_LOW, POWER_OFF
 from machine import WDT
 from machine import Pin
