@@ -107,8 +107,6 @@ def notify_zero2w(ip):
 # ===== コマンド分類（軽量） =====
 def classify_command(cmd):
     cmd = cmd.strip()
-    if cmd == "PING":
-        return "PING", None
     if cmd.startswith("IR:"):
         return "IR", cmd[3:]
     return "NG", None
@@ -197,12 +195,6 @@ while True:
 
         cmd_str = data.decode().strip()
         kind, mode = classify_command(cmd_str)
-
-        # PING は即応答
-        if kind == "PING":
-            conn.send(b"PONG")
-            conn.close()
-            continue
 
         # IR コマンド
         if kind == "IR":
