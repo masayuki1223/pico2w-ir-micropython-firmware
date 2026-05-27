@@ -22,6 +22,8 @@ Pico2W のストレージに以下を配置します：
 
 main.py        ← aircon_ir_node.py をリネーム
 
+config.py      ← WifiのSSIDとPassword
+
 pulses.py      ← 赤外線パルスデータ
 
 aircon_ir_node.py は 必ず main.py にリネームしてください。
@@ -30,7 +32,7 @@ Pico2W 起動時に自動実行されます。
 
 ■ ③ Wi‑Fi 設定を行う
 
-main.py 内の以下を編集：
+config.py 内の以下を編集：
 
 SSID = "your-ssid"
 
@@ -104,6 +106,8 @@ aircon_panel.py が必要とする pip パッケージは、
 pico/
 
 ├─ main.py          ← aircon_ir_node.py をリネーム
+
+├─ config.py
 
 └─ pulses.py
 
