@@ -8,8 +8,6 @@ from machine import WDT
 from machine import Pin
 
 # ===== 設定 =====
-SSID = "xxxxxxxxxxxxxxxx"
-PASS = "xxxxxxxxxxxxxxxx"
 STATIC_IP = ("192.168.0.203", "255.255.255.0", "192.168.0.1", "192.168.0.1")
 PORT = 5000
 
