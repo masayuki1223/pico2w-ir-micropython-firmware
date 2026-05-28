@@ -1,6 +1,7 @@
 import network
 import socket
 import time
+import machine
 import ir
 from config import SSID, PASS
 from pulses import HEAT_25, COOL_25, FAN_LOW, POWER_OFF
@@ -16,6 +17,8 @@ wlan = network.WLAN(network.STA_IF)
 
 led = Pin("LED", Pin.OUT)
 led.off()
+
+wifi_fail_count = 0
 
 # 処理中フラグ & 保留コマンド
 processing = False
@@ -177,7 +180,19 @@ while True:
         except OSError:
             # タイムアウト → Wi-Fi 死んでたら復旧
             if not wlan.isconnected():
-                ensure_wifi()
+                ok = ensure_wifi()
+                if not ok:
+                    wifi_fail_count += 1
+                    print("Wi-Fi recovery failed:", wifi_fail_count)
+                    
+                    if wifi_fail_count >= 3:
+                        # 3回接続失敗したらリブート
+                        print("Wi-Fi failed 3 times → reboot")
+                        time.sleep_ms(200)
+                        machine.reset()
+                else:
+                    # 成功したらカウンタをリセット
+                    wifi_fail_count = 0
             continue
 
         conn.settimeout(2)
