@@ -56,26 +56,22 @@ def start_server():
 
 server = start_server()
 
-# ===== Zero2W に通知（/success） =====
-def notify_zero2w(ip):
+# ===== PiOS に通知（/success） =====
+def notify_PiOS(ip):
     try:
         import usocket as socket
-        port = 5000
-        path = "/success"
-
-        addr = socket.getaddrinfo(ip, port)[0][-1]
         s = socket.socket()
-        s.connect(addr)
+        s.connect((ip, 5000))
 
         body = "SUCCESS"
         req = (
-            "POST {} HTTP/1.1\r\n"
+            "POST /success HTTP/1.1\r\n"
             "Host: {}\r\n"
             "Content-Type: text/plain\r\n"
             "Content-Length: {}\r\n"
             "\r\n"
             "{}"
-        ).format(path, ip, len(body), body)
+        ).format(ip, len(body), body)
 
         s.send(req.encode())
         s.close()
@@ -126,7 +122,7 @@ def process_pending():
     time.sleep(0.3)  # DHCP & TCP 安定待ち
 
     # Zero2W に SUCCESS 通知
-    notify_zero2w(pending_ip)
+    notify_PiOS(pending_ip)
 
     print("IR done:", mode)
     led.off()
@@ -136,9 +132,25 @@ def process_pending():
     pending_cmd = None
     pending_ip = None
 
+
+# ===== Wifiスリープ防止 =====
+def wifi_keepalive():
+    try:
+        # ルーターに ping（最も確実に応答がある）
+        network.WLAN().ping("192.168.0.1")
+    except:
+        pass
+
 # ===== メインループ =====
+last_ping = time.ticks_ms()
+
 while True:
     wdt.feed()
+
+    # 10 秒に 1 回 keepalive
+    if time.ticks_diff(time.ticks_ms(), last_ping) > 10000:
+        wifi_keepalive()
+        last_ping = time.ticks_ms()
 
     # まず重い処理（保留コマンド）を進める
     process_pending()
