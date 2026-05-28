@@ -123,7 +123,7 @@ def process_pending():
         pending_ip = None
         return
 
-    time.sleep(1)  # DHCP & TCP 安定待ち
+    time.sleep(0.3)  # DHCP & TCP 安定待ち
 
     # Zero2W に SUCCESS 通知
     notify_zero2w(pending_ip)
