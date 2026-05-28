@@ -1,12 +1,10 @@
 import network
 import socket
 import time
-import machine
 import ir
 from config import SSID, PASS
 from pulses import HEAT_25, COOL_25, FAN_LOW, POWER_OFF
-from machine import WDT
-from machine import Pin
+from machine import WDT, Pin
 
 # ===== 設定 =====
 STATIC_IP = ("192.168.0.203", "255.255.255.0", "192.168.0.1", "192.168.0.1")
@@ -18,32 +16,10 @@ wlan = network.WLAN(network.STA_IF)
 led = Pin("LED", Pin.OUT)
 led.off()
 
-wifi_fail_count = 0
-
 # 処理中フラグ & 保留コマンド
 processing = False
 pending_cmd = None
 pending_ip = None
-
-# ===== Wi-Fi 安全停止 =====
-def wifi_safe_off():
-    if wlan.active():
-        wlan.active(False)
-        time.sleep_ms(1000)
-
-# ===== Wi-Fi 再起動（接続完了まで待つ） =====
-def wifi_safe_on():
-    wlan.active(True)
-    time.sleep_ms(200)
-    wlan.ifconfig(STATIC_IP)
-    wlan.connect(SSID, PASS)
-
-    for _ in range(25):  # 最大5秒
-        if wlan.isconnected():
-            return True
-        time.sleep_ms(200)
-        wdt.feed()
-    return False
 
 # ===== 初回接続 =====
 def ensure_wifi():
@@ -132,9 +108,6 @@ def process_pending():
     print("IR start:", mode, "to", pending_ip)
     led.on()
 
-    # Wi-Fi OFF → IR → Wi-Fi ON
-    wifi_safe_off()
-
     if mode == "HEAT25":
         ir.send(HEAT_25)
     elif mode == "COOL25":
@@ -145,13 +118,11 @@ def process_pending():
         ir.send(POWER_OFF)
     else:
         # 不明コマンド
-        wifi_safe_on()
         processing = False
         pending_cmd = None
         pending_ip = None
         return
 
-    wifi_safe_on()
     time.sleep(1)  # DHCP & TCP 安定待ち
 
     # Zero2W に SUCCESS 通知
@@ -180,19 +151,7 @@ while True:
         except OSError:
             # タイムアウト → Wi-Fi 死んでたら復旧
             if not wlan.isconnected():
-                ok = ensure_wifi()
-                if not ok:
-                    wifi_fail_count += 1
-                    print("Wi-Fi recovery failed:", wifi_fail_count)
-                    
-                    if wifi_fail_count >= 3:
-                        # 3回接続失敗したらリブート
-                        print("Wi-Fi failed 3 times → reboot")
-                        time.sleep_ms(200)
-                        machine.reset()
-                else:
-                    # 成功したらカウンタをリセット
-                    wifi_fail_count = 0
+                ensure_wifi()
             continue
 
         conn.settimeout(2)
