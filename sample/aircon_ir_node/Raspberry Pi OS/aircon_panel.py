@@ -132,7 +132,7 @@ def index():
 
                     if (j.status === "NOT_READY") {{
                         msg.style.color = "red";
-                        msg.textContent = "Pico2W が IR送信中です。しばらくお待ちください。";
+                        msg.textContent = "Pico2W からの応答がありません";
                         return;
                     }}
 
