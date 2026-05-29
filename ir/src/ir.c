@@ -20,10 +20,12 @@ static mp_obj_t mp_ir_receive(void) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_0(mp_ir_receive_obj, mp_ir_receive);
 
-static mp_obj_t mp_ir_send(mp_obj_t list_obj) {
+static mp_obj_t mp_ir_send(mp_obj_t seq_obj) {
     size_t len;
     mp_obj_t *items;
-    mp_obj_list_get(list_obj, &len, &items);
+
+    // list でも tuple でも OK
+    mp_obj_get_array(seq_obj, &len, &items);
 
     static uint32_t buf[2000];
     for (size_t i = 0; i < len; i++) {
