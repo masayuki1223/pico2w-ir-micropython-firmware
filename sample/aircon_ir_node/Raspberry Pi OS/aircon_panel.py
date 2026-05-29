@@ -2,16 +2,13 @@ import subprocess
 import platform
 import time
 import socket
-import asyncio
-from fastapi import FastAPI, Request
-from fastapi.responses import StreamingResponse, HTMLResponse
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
 PICO_IR_IP = "192.168.0.203"
 PICO_IR_TCP_PORT = 5000
-
-sse_clients = []
 
 # -----------------------------
 #  Ping 判定
@@ -86,38 +83,6 @@ def aircon_send(cmd: str):
 
     return {"status": resp, "cmd": cmd}
 
-
-# -----------------------------
-#  SSE: 成功通知
-# -----------------------------
-@app.get("/events")
-async def sse_events():
-    async def event_stream():
-        queue = asyncio.Queue()
-        sse_clients.append(queue)
-        try:
-            while True:
-                msg = await queue.get()
-                yield f"data: {msg}\n\n"
-        except:
-            pass
-        finally:
-            sse_clients.remove(queue)
-
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
-
-
-@app.post("/success")
-async def success_handler(request: Request):
-    body = await request.body()
-    print("SUCCESS from Pico2W:", body.decode())
-
-    # 全クライアントに通知
-    for q in sse_clients:
-        await q.put("SUCCESS")
-
-    return {"status": "ok"}
-
 @app.get("/")
 def index():
     return HTMLResponse(f"""
@@ -158,16 +123,6 @@ def index():
         <script>
         const msg = document.getElementById("msg");
 
-        // SSE で Zero2W からの通知を受け取る
-        const evt = new EventSource("/events");
-        evt.onmessage = function(e) {{
-            if (e.data === "SUCCESS") {{
-                msg.style.color = "green"
-                msg.textContent = "送信完了！";
-                setTimeout(() => msg.textContent = "", 3000);
-            }}
-        }};
-
         function send(cmd) {{
             msg.style.color = "black"
             msg.textContent = "送信中…";  // 送信開始表示
@@ -192,8 +147,14 @@ def index():
                         msg.textContent = "通信エラーが発生しました";
                         return;
                     }}
+                        
+                    if (j.status === "OK") {{
+                        msg.style.color = "green";
+                        msg.textContent = "送信完了！";
+                        setTimeout(() => msg.textContent = "", 3000);
+                        return;
+                    }}
 
-                    // OK の場合は SUCCESS が SSE で来るのでここでは何もしない
                 }});
         }}
         </script>
