@@ -55,13 +55,13 @@ def start_server():
 
 server = start_server()
 
-# ===== コマンド分類（軽量） =====
+# ===== コマンド分類 =====
 def classify_command(cmd):
     if cmd.startswith("IR:"):
         return cmd[3:]
     return None
 
-# ===== IR 実行ルーチン（重い処理はこちら） =====
+# ===== IR 実行ルーチン =====
 def process_pending():
     global processing, pending_cmd
 
@@ -106,10 +106,10 @@ while True:
     wdt.feed()
     led.off()
 
-    # まず重い処理（保留コマンド）を進める
+    # IR 実行ルーチン
     process_pending()
 
-    # 受信ループ（軽量）
+    # 受信ループ
     try:
         try:
             conn, addr = server.accept()
@@ -140,7 +140,7 @@ while True:
                 # すでに1件処理中 → BUSY
                 conn.send(b"BUSY")
             else:
-                # 受け付けて OK を返すだけ
+                # 受け付けて OK を返す
                 pending_cmd = cmd_str
                 processing = True
                 conn.send(b"OK")
