@@ -14,18 +14,17 @@ wdt = WDT(timeout=8000)
 wlan = network.WLAN(network.STA_IF)
 
 led = Pin("LED", Pin.OUT)
-led.off()
 
 # 処理中フラグ & 保留コマンド
 processing = False
 pending_cmd = None
-pending_ip = None
 
 # ===== 初回接続 =====
 def ensure_wifi():
     wlan.active(False)
     time.sleep_ms(500)
     wlan.active(True)
+    wlan.config(pm=0xa11140)
     time.sleep_ms(200)
     wlan.ifconfig(STATIC_IP)
     wlan.connect(SSID, PASS)
@@ -49,59 +48,35 @@ def start_server():
     s = socket.socket()
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind(addr)
-    s.listen(5)
+    s.listen(1)
     s.settimeout(1)  # 受信ループを回し続けるためのタイムアウト
     print("Listening on", addr)
     return s
 
 server = start_server()
 
-# ===== PiOS に通知（/success） =====
-def notify_PiOS(ip):
-    try:
-        import usocket as socket
-        s = socket.socket()
-        s.connect((ip, 5000))
-
-        body = "SUCCESS"
-        req = (
-            "POST /success HTTP/1.1\r\n"
-            "Host: {}\r\n"
-            "Content-Type: text/plain\r\n"
-            "Content-Length: {}\r\n"
-            "\r\n"
-            "{}"
-        ).format(ip, len(body), body)
-
-        s.send(req.encode())
-        s.close()
-    except Exception as e:
-        print("notify error:", e)
-
 # ===== コマンド分類（軽量） =====
 def classify_command(cmd):
-    cmd = cmd.strip()
     if cmd.startswith("IR:"):
-        return "IR", cmd[3:]
-    return "NG", None
+        return cmd[3:]
+    return None
 
 # ===== IR 実行ルーチン（重い処理はこちら） =====
 def process_pending():
-    global processing, pending_cmd, pending_ip
+    global processing, pending_cmd
 
-    if not processing or pending_cmd is None or pending_ip is None:
+    if not processing or pending_cmd is None:
         return
 
-    kind, mode = classify_command(pending_cmd)
+    mode = classify_command(pending_cmd)
 
-    if kind != "IR":
+    if not mode:
         # 想定外だが一応クリア
         processing = False
         pending_cmd = None
-        pending_ip = None
         return
 
-    print("IR start:", mode, "to", pending_ip)
+    print("IR start:", mode)
     led.on()
 
     if mode == "HEAT25":
@@ -116,45 +91,23 @@ def process_pending():
         # 不明コマンド
         processing = False
         pending_cmd = None
-        pending_ip = None
         return
 
-    time.sleep(0.3)  # DHCP & TCP 安定待ち
-
-    # Zero2W に SUCCESS 通知
-    notify_PiOS(pending_ip)
-
     print("IR done:", mode)
-    led.off()
 
     # 処理完了
     processing = False
     pending_cmd = None
-    pending_ip = None
-
-
-# ===== Wifiスリープ防止 =====
-def wifi_keepalive():
-    try:
-        # ルーターに ping（最も確実に応答がある）
-        network.WLAN().ping("192.168.0.1")
-    except:
-        pass
 
 # ===== メインループ =====
 last_ping = time.ticks_ms()
 
 while True:
     wdt.feed()
-
-    # 10 秒に 1 回 keepalive
-    if time.ticks_diff(time.ticks_ms(), last_ping) > 10000:
-        wifi_keepalive()
-        last_ping = time.ticks_ms()
+    led.off()
 
     # まず重い処理（保留コマンド）を進める
     process_pending()
-    led.off()
 
     # 受信ループ（軽量）
     try:
@@ -166,7 +119,7 @@ while True:
                 ensure_wifi()
             continue
 
-        conn.settimeout(2)
+        conn.settimeout(1)
 
         try:
             data = conn.recv(128)
@@ -179,17 +132,16 @@ while True:
             continue
 
         cmd_str = data.decode().strip()
-        kind, mode = classify_command(cmd_str)
+        mode = classify_command(cmd_str)
 
         # IR コマンド
-        if kind == "IR":
+        if mode:
             if processing:
                 # すでに1件処理中 → BUSY
                 conn.send(b"BUSY")
             else:
                 # 受け付けて OK を返すだけ
                 pending_cmd = cmd_str
-                pending_ip = addr[0]
                 processing = True
                 conn.send(b"OK")
             conn.close()
