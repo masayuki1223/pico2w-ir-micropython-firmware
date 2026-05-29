@@ -40,8 +40,8 @@ def ping_check(ip, timeout=5):
 def pico_ready(ip):
     """
     Pico2W が TCP を受けられる状態か判定する。
-    ping が返る → Wi-Fi ON、IR送信していない → True
-    ping が返らない → Wi-Fi OFF（IR中）→ False
+    ping が返る → Wi-Fi ON、Pico2W受信可能 → True
+    ping が返らない → Wi-Fi OFF、Pico2Wが落ちてる → False
     """
     return ping_check(ip, timeout=5)
 
