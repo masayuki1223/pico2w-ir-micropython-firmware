@@ -1,6 +1,7 @@
 import ir
 import time
 import json
+import os
 from machine import Pin
 
 # --- GPIO 設定 ---
@@ -9,8 +10,13 @@ btn_send = Pin(9, Pin.IN, Pin.PULL_UP)
 
 led_green  = Pin(3, Pin.OUT)     # 受信中
 led_bule   = Pin(7, Pin.OUT)     # 受信成功
-led_White  = Pin(6, Pin.OUT)     # 未使用
+led_white  = Pin(6, Pin.OUT)     # 未使用
 led_yellow = Pin(28, Pin.OUT)    # エラー点滅
+
+led_green.off()
+led_bule.off()
+led_white.off()
+led_yellow.off()
 
 # --- IR 初期化 ---
 ir.init()
@@ -18,10 +24,19 @@ ir.init()
 # --- 保存ファイル名 ---
 FILENAME = "learned.json"
 
+# 起動時に JSON を削除
+try:
+    os.remove(FILENAME)
+    print("Deleted old JSON")
+except OSError:
+    # ファイルが無い場合は無視
+    pass
+
+
 
 # --- エラー点滅 ---
 def blink_error():
-    for _ in range(4):
+    for _ in range(3):
         led_yellow.on()
         time.sleep(0.2)
         led_yellow.off()
@@ -90,5 +105,3 @@ while True:
             time.sleep(0.05)
 
     time.sleep(0.02)
-
-
