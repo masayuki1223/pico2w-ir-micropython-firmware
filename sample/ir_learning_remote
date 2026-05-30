@@ -7,10 +7,10 @@ from machine import Pin
 btn_recv = Pin(8, Pin.IN, Pin.PULL_UP)
 btn_send = Pin(9, Pin.IN, Pin.PULL_UP)
 
-led_recv = Pin(3, Pin.OUT)   # 受信中
-led_ok   = Pin(7, Pin.OUT)   # 受信成功
-led_send = Pin(6, Pin.OUT)   # 送信中
-led_err  = Pin(28, Pin.OUT)  # エラー点滅
+led_green  = Pin(3, Pin.OUT)     # 受信中
+led_bule   = Pin(7, Pin.OUT)    # 受信成功
+led_White  = Pin(6, Pin.OUT)     # 未使用
+led_yellow = Pin(28, Pin.OUT)  # エラー点滅
 
 # --- IR 初期化 ---
 ir.init()
@@ -79,9 +79,7 @@ while True:
         pulses = load_raw()
 
         if pulses:
-            led_send.on()
             ir.send(pulses)
-            led_send.off()
             print("Send OK")
         else:
             print("No data")
