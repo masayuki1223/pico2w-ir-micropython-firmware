@@ -1,6 +1,7 @@
 import ir
 import time
 import json
+import os
 from machine import Pin
 
 # --- GPIO 設定 ---
@@ -26,10 +27,10 @@ FILENAME = "learned.json"
 # 起動時に JSON が存在するかチェック
 if FILENAME in os.listdir():
     print("Found existing data")
-    for _ in range(3):
-        led_bule.on()
-        time.sleep(0.2)
+    for _ in range(4):
         led_bule.off()
+        time.sleep(0.2)
+        led_bule.on()
         time.sleep(0.2)
 
 # --- エラー点滅 ---
