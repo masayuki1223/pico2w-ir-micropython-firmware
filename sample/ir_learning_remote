@@ -1,0 +1,96 @@
+import ir
+import time
+import json
+from machine import Pin
+
+# --- GPIO 設定 ---
+btn_recv = Pin(8, Pin.IN, Pin.PULL_UP)
+btn_send = Pin(9, Pin.IN, Pin.PULL_UP)
+
+led_recv = Pin(3, Pin.OUT)   # 受信中
+led_ok   = Pin(7, Pin.OUT)   # 受信成功
+led_send = Pin(6, Pin.OUT)   # 送信中
+led_err  = Pin(28, Pin.OUT)  # エラー点滅
+
+# --- IR 初期化 ---
+ir.init()
+
+# --- 保存ファイル名 ---
+FILENAME = "learned.json"
+
+
+# --- エラー点滅 ---
+def blink_error():
+    for _ in range(4):
+        led_err.on()
+        time.sleep(0.2)
+        led_err.off()
+        time.sleep(0.2)
+
+
+# --- RAW データ保存 ---
+def save_raw(pulses):
+    with open(FILENAME, "w") as f:
+        json.dump({"raw": pulses}, f)
+
+
+# --- RAW データ読み込み ---
+def load_raw():
+    try:
+        with open(FILENAME) as f:
+            data = json.load(f)
+            return tuple(data["raw"])
+    except:
+        return None
+
+
+# --- メインループ ---
+print("Ready. Press GPIO8 to learn, GPIO9 to send.")
+
+while True:
+
+    # --- 受信ボタン ---
+    if btn_recv.value() == 0:
+        print("Receive mode start")
+        led_recv.on()
+        led_ok.off()
+
+        # 受信開始
+        pulses = ir.receive()  # IndoorCorgi の receive
+
+        led_recv.off()
+
+        if pulses:
+            print("Receive OK, length =", len(pulses))
+            save_raw(pulses)
+            led_ok.on()
+        else:
+            print("Receive failed")
+            blink_error()
+
+        # ボタン離すまで待つ
+        while btn_recv.value() == 0:
+            time.sleep(0.05)
+
+    # --- 送信ボタン ---
+    if btn_send.value() == 0:
+        print("Send mode start")
+
+        pulses = load_raw()
+
+        if pulses:
+            led_send.on()
+            ir.send(pulses)
+            led_send.off()
+            print("Send OK")
+        else:
+            print("No data")
+            blink_error()
+
+        # ボタン離すまで待つ
+        while btn_send.value() == 0:
+            time.sleep(0.05)
+
+    time.sleep(0.02)
+
+
