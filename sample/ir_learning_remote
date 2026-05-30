@@ -8,9 +8,9 @@ btn_recv = Pin(8, Pin.IN, Pin.PULL_UP)
 btn_send = Pin(9, Pin.IN, Pin.PULL_UP)
 
 led_green  = Pin(3, Pin.OUT)     # 受信中
-led_bule   = Pin(7, Pin.OUT)    # 受信成功
+led_bule   = Pin(7, Pin.OUT)     # 受信成功
 led_White  = Pin(6, Pin.OUT)     # 未使用
-led_yellow = Pin(28, Pin.OUT)  # エラー点滅
+led_yellow = Pin(28, Pin.OUT)    # エラー点滅
 
 # --- IR 初期化 ---
 ir.init()
@@ -22,9 +22,9 @@ FILENAME = "learned.json"
 # --- エラー点滅 ---
 def blink_error():
     for _ in range(4):
-        led_err.on()
+        led_yellow.on()
         time.sleep(0.2)
-        led_err.off()
+        led_yellow.off()
         time.sleep(0.2)
 
 
@@ -52,18 +52,18 @@ while True:
     # --- 受信ボタン ---
     if btn_recv.value() == 0:
         print("Receive mode start")
-        led_recv.on()
-        led_ok.off()
+        led_green.on()
+        led_bule.off()
 
         # 受信開始
         pulses = ir.receive()  # IndoorCorgi の receive
 
-        led_recv.off()
+        led_green.off()
 
         if pulses:
             print("Receive OK, length =", len(pulses))
             save_raw(pulses)
-            led_ok.on()
+            led_bule.on()
         else:
             print("Receive failed")
             blink_error()
