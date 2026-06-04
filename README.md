@@ -1,4 +1,6 @@
-📘 About the MicroPython Firmware with Infrared Remote Control Support for Pico2W This project provides a custom MicroPython firmware for the Raspberry Pi Pico2W that enables infrared (IR) transmission and reception — functionality not available in standard MicroPython builds.
+📘 About the MicroPython Firmware with Infrared Remote Control Support for Pico2W
+
+This project provides a custom MicroPython firmware for the Raspberry Pi Pico2W that enables infrared (IR) transmission and reception — functionality not available in standard MicroPython builds.
 
 Hardware Used 
 
