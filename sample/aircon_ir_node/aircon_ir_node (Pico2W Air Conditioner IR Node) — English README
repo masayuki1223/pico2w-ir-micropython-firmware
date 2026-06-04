@@ -74,9 +74,9 @@ This ensures that the captured pulse data is correct.
 
 4. 🚀 How aircon_ir_node Works
 
-The Pico2W acts as a TCP server.
+The Pico2W operates as a TCP server.
 
-It receives commands from a PC or Raspberry Pi OS device such as:
+When it receives a command such as:
 
 COOL27
 
@@ -84,13 +84,17 @@ HEAT25
 
 OFF
 
-Upon receiving a command, it sends the corresponding IR pulse sequence
+it immediately responds with:
 
-and returns:
+OK
 
-/success
+and closes the TCP connection.
 
-to the controller.
+After the connection is closed,
+
+the Pico2W transmits the corresponding IR pulse sequence.
+
+This ensures that Wi‑Fi communication and IR transmission do not interfere with each other.
 
 5. 🖥 Operating from Raspberry Pi OS (with UI)
 
