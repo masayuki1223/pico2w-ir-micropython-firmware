@@ -19,7 +19,7 @@ led_white.off()
 led_yellow.off()
 
 # --- IR 初期化 ---
-ir.init()
+ir.init(10, 2) # 送信ピン 10、受信ピン 2
 
 # --- 保存ファイル名 ---
 FILENAME = "learned.json"
