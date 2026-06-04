@@ -1,0 +1,150 @@
+📘 aircon_ir_node (Pico2W Air Conditioner IR Node) — English README
+
+aircon_ir_node.py is a program that turns a Raspberry Pi Pico2W into a Wi‑Fi–controlled infrared (IR) remote node for air conditioners.
+
+This node can be controlled via TCP from another device such as a Raspberry Pi Zero2W or any Raspberry Pi running Raspberry Pi OS.
+
+1. 🔧 Requirements
+
+■ ① Flash the custom MicroPython firmware (required)
+
+To enable IR transmission and reception on the Pico2W,
+
+you must use a custom MicroPython firmware that includes the IR library originally published by Indoor Corgi.
+
+Refer to the firmware README for build instructions.
+
+Alternatively, if you prefer not to build it yourself,
+
+you may use the prebuilt firmware.uf2 included in this repository.
+
+■ ② Place the required files on the Pico2W
+
+Copy the following files to the Pico2W’s storage:
+
+main.py        ← rename aircon_ir_node.py to this filename
+
+config.py      ← Wi‑Fi SSID and password
+
+pulses.py      ← IR pulse data
+
+aircon_ir_node.py must be renamed to main.py,
+
+as it will be executed automatically at boot.
+
+■ ③ Configure Wi‑Fi
+
+Edit the following fields in config.py:
+
+SSID = "your-ssid"
+
+PASSWORD = "your-password"
+
+■ ④ Assign a static IP to the Pico2W (important)
+
+To allow Zero2W or Raspberry Pi OS devices to connect via TCP,
+
+configure your router to assign a static IP or DHCP reservation to the Pico2W.
+
+Without a fixed IP, the controller cannot locate the Pico2W.
+
+By default, this program expects the Pico2W to use:
+
+192.168.0.203
+
+2. 📡 Preparing pulses.py
+
+pulses.py should contain IR pulse data for your air conditioner:
+
+ir_cool27 = (...)
+
+ir_heat25 = (...)
+
+ir_off = (...)
+
+Paste the pulse data captured using ir_receive.py directly into these variables.
+
+3. 🧪 Recommended Pre‑Deployment Testing
+
+Before using this in a real environment, verify the IR data:
+
+✔ Use ir_send.py to confirm that your air conditioner responds
+
+This ensures that the captured pulse data is correct.
+
+4. 🚀 How aircon_ir_node Works
+
+The Pico2W acts as a TCP server.
+
+It receives commands from a PC or Raspberry Pi OS device such as:
+
+COOL27
+
+HEAT25
+
+OFF
+
+Upon receiving a command, it sends the corresponding IR pulse sequence
+
+and returns:
+
+/success
+
+to the controller.
+
+5. 🖥 Operating from Raspberry Pi OS (with UI)
+
+You can control the node directly from the command line, for example:
+
+echo "IR:COOL25" | nc 192.168.0.203 5000
+
+However, if you set up a Raspberry Pi OS device (Zero2W / Pi3 / Pi4 / Pi5),
+
+you can run a web-based control panel.
+
+Steps:
+
+Place aircon_panel.py on the Raspberry Pi OS device
+
+Run it as a systemd service
+
+A sample service file is provided as aircon_panel.service
+
+6. 📦 Required Python Packages (for aircon_panel.py)
+
+aircon_panel.py requires several Python packages.
+
+Please install them manually (virtual environment recommended):
+
+FastAPI
+
+uvicorn
+
+requests
+
+7. 📁 Example Directory Structure
+
+pico/
+
+├─ main.py          ← renamed from aircon_ir_node.py
+
+├─ config.py
+
+└─ pulses.py
+
+raspberrypi/
+
+├─ aircon_panel.py
+
+└─ aircon_panel.service
+
+8. ⚠️ Notes and Known Issues
+
+This program is not fully stable yet.
+
+The following issue is known:
+
+Pico2W may stop responding after running for a long time.
+
+The program includes several workarounds to reduce crashes,
+but continuous operation is not guaranteed.
