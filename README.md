@@ -2,17 +2,17 @@
 
 Hardware Used 
 
-RPZ-IR-Sensor Rev2 (Indoor Corgi)
+  RPZ-IR-Sensor Rev2 (Indoor Corgi)
 
-RPP-HAT-Adapter
+  RPP-HAT-Adapter
 
 Libraries Used This firmware incorporates the following files published by Indoor Corgi:
 
-infrared.h (used as the original reference; the actual build uses infrared_ext.h)
+  infrared.h (used as the original reference; the actual build uses infrared_ext.h)
 
-infrared.c (same as above; the actual build uses infrared_ext.c)
+  infrared.c (same as above; the actual build uses infrared_ext.c)
 
-infrared.pio.h (generated during build)
+  infrared.pio.h (generated during build)
 
 All copyrights belong to the original creators.
 
