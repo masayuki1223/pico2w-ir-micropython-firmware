@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2025 Indoor Corgi
- *
- * SPDX-License-Identifier: MIT
- */
-
 📘 Pico2W 用 赤外線リモコン機能付き MicroPython ファームウェアについて
 
 Raspberry Pi Pico2W で赤外線リモコンを扱うため、
@@ -77,6 +71,10 @@ Pico2W（RP2350）向けのカスタムビルドです。
 
 MicroPython から直接 IR を扱えるため、  
 赤外線リモコンの実装が大幅に簡単になります。
+
+
+ * Copyright (c) 2025 Indoor Corgi
+ * SPDX-License-Identifier: MIT
 
 更新履歴
 
