@@ -54,7 +54,9 @@ https://youtu.be/CiHwa2uEGL8?si=j78sp6HAiGvLg5oV
 
 By enabling direct IR control from MicroPython, implementing IR remote functions becomes significantly easier.
 
-📝 Update History 2026/6/4
+📝 Update History 
+
+2026/6/4
 
 Added support for selecting GPIO pin numbers during initialization.
 
