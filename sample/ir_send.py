@@ -1,7 +1,7 @@
 import ir
 import time
 
-ir.init()
+ir.init(10, 2) # 初期化、送信ピン 10、受信ピン 2
 
 # ここに事前に保存しておいた RAW データを貼る
 saved_pulses = (
