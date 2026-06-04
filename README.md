@@ -72,10 +72,6 @@ Pico2W（RP2350）向けのカスタムビルドです。
 MicroPython から直接 IR を扱えるため、  
 赤外線リモコンの実装が大幅に簡単になります。
 
-
- * Copyright (c) 2025 Indoor Corgi
- * SPDX-License-Identifier: MIT
-
 更新履歴
 
 5/29
