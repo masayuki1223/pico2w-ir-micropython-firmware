@@ -4,7 +4,7 @@ add_library(usermod_ir INTERFACE)
 # Add our source files to the lib
 target_sources(usermod_ir INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}/ir.c
-    ${CMAKE_CURRENT_LIST_DIR}/infrared.c
+    ${CMAKE_CURRENT_LIST_DIR}/infrared_ext.c
 )
 
 # Add the current directory as an include directory.
