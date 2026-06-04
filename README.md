@@ -62,7 +62,9 @@ Wi-Fi–controlled air conditioner remote
 
 See the README inside the aircon_ir_node folder for details
 
-🎥 Demo Video (YouTube) This video demonstrates simultaneous IR transmission and Wi‑Fi communication using this custom firmware and sample code. You can see the Pico2W actually controlling an air conditioner.
+🎥 Demo Video (YouTube)
+
+This video demonstrates simultaneous IR transmission and Wi‑Fi communication using this custom firmware and sample code. You can see the Pico2W actually controlling an air conditioner.
 
 https://youtu.be/CiHwa2uEGL8?si=j78sp6HAiGvLg5oV
 
