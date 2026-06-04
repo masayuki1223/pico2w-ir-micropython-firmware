@@ -9,8 +9,8 @@
 #include "hardware/clocks.h"
 #include "infrared.pio.h"
 
-uint8_t infrared_send_pin = 10;
-uint8_t infrared_receive_pin = 2;
+uint8_t infrared_send_pin;
+uint8_t infrared_receive_pin;
 
 PIO send_pio;
 uint send_sm;
