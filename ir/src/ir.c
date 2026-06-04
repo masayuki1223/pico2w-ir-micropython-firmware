@@ -38,12 +38,18 @@ static mp_obj_t mp_ir_send(mp_obj_t seq_obj) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(mp_ir_send_obj, mp_ir_send);
 
-static mp_obj_t mp_ir_init(void) {
+static mp_obj_t mp_ir_init(mp_obj_t send_pin_obj, mp_obj_t recv_pin_obj) {
+    // Python から渡されたピン番号を C の変数に代入
+    infrared_send_pin = mp_obj_get_int(send_pin_obj);
+    infrared_receive_pin = mp_obj_get_int(recv_pin_obj);
+
+    // 初期化
     infrared_send_init();
     infrared_receive_init();
+
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_0(mp_ir_init_obj, mp_ir_init);
+static MP_DEFINE_CONST_FUN_OBJ_2(mp_ir_init_obj, mp_ir_init);
 
 static const mp_rom_map_elem_t ir_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&mp_ir_init_obj) },
