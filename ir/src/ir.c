@@ -4,7 +4,7 @@
 #include "py/mperrno.h"
 #include "py/mphal.h"
 
-#include "infrared.h"
+#include "infrared_ext.h"
 
 static mp_obj_t mp_ir_receive(void) {
     static uint32_t buf[2000];
