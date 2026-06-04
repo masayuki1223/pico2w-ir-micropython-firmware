@@ -4,7 +4,7 @@ import time
 import gc
 import ir
 from config import SSID, PASS
-from pulses import HEAT_25, COOL_25, FAN_LOW, POWER_OFF
+from pulses import HEAT_25, COOL_25, DRY_25, FAN_LOW, POWER_OFF
 from machine import WDT, Pin
 
 # ===== 設定 =====
@@ -30,7 +30,7 @@ led_white.off()
 led_yellow.off()
 led_pico.off()
 
-ir.init()
+ir.init(10, 2)
 
 # 処理中フラグ & 保留コマンド
 processing = False
@@ -71,8 +71,8 @@ def stop_server(server):
 # --- Wi-Fi リフレッシュ ---
 def wifi_refresh(wlan):
     wlan.active(False)
-    time.sleep(1.2)
-    wdt.feed()
+    time.sleep(1.2)  # ★ Pico2Wは1秒以上待たないと不安定
+    wdt.feed()  # ★ 安全のため追加
     wlan.active(True)
     wlan.config(pm=0xa11140)
     time.sleep_ms(200)
@@ -107,7 +107,7 @@ def wifi_error_recovery():
 
         wdt.feed()  # ★ WDT を止めない
 
-        # Wi-Fi OFF → ON
+        # Wi-Fi OFF → ON（Pico2Wはこれが重要）
         wlan.active(False)
         time.sleep(1.2)
         wlan.active(True)
@@ -167,6 +167,8 @@ def process_pending():
         ir.send(HEAT_25)
     elif mode == "COOL25":
         ir.send(COOL_25)
+    elif mode == "DRY25":
+        ir.send(DRY_25)
     elif mode == "FANLOW":
         ir.send(FAN_LOW)
     elif mode == "OFF":
