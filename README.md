@@ -15,7 +15,7 @@ Raspberry Pi Pico2W で赤外線リモコンを扱うため、
 
 ・infrared.h（アレンジ元として利用。実際のbuildにはinfrared_ext.hを使用しています。）
 
-・infrared.c（同上）
+・infrared.c（同上。実際のbuildにはinfrared_ext.cを使用しています。）
 
 ・infrared.pio.h（ビルド時に生成される）
 
