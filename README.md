@@ -18,7 +18,9 @@ Libraries Used This firmware incorporates the following files published by Indoo
 
 All copyrights belong to the original creators.
 
-📁 File Placement Prepare a MicroPython build environment and create the following directory:
+📁 File Placement
+
+Prepare a MicroPython build environment and create the following directory:
 
 /micropython/ports/rp2/modules/ir
 
