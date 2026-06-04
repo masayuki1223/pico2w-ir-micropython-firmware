@@ -16,11 +16,17 @@ All copyrights belong to the original creators.
 
 📁 File Placement Prepare a MicroPython build environment and create the following directory:
 
-コード /micropython/ports/rp2/modules/ir Place all infrared_* files inside this directory.
+/micropython/ports/rp2/modules/ir
+
+Place all infrared_* files inside this directory.
 
 🔧 Build Instructions Run the following commands in your terminal to build a firmware image with IR functionality:
 
-コード cd ~/micropython/ports/rp2 make BOARD=RPI_PICO2_W USER_C_MODULES=modules/ir -j4 Flash the generated firmware.uf2 onto your Pico2W to enable IR transmission and reception from MicroPython.
+cd ~/micropython/ports/rp2
+
+make BOARD=RPI_PICO2_W USER_C_MODULES=modules/ir -j4
+
+Flash the generated firmware.uf2 onto your Pico2W to enable IR transmission and reception from MicroPython.
 
 📡 Usage Refer to the sample scripts in the sample folder:
 
