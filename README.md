@@ -13,9 +13,9 @@ Raspberry Pi Pico2W で赤外線リモコンを扱うため、
 
 ライブラリは、Indoor Corgi 様が公開されている以下のファイルを利用しています：
 
-・infrared.h
+・infrared.h（アレンジ元として利用。実際のbuildにはinfrared_ext.hを使用します。）
 
-・infrared.c
+・infrared.c（アレンジ元として利用。実際のbuildにはinfrared_ext.cを使用します。）
 
 ・infrared.pio.h（ビルド時に生成される）
 
@@ -74,5 +74,9 @@ MicroPython から直接 IR を扱えるため、
 
 更新履歴
 
-5/29
+2026/6/4
+初期化時にGPIOのピン番号を選択できるようにしました。送信、受信ともにGPIO 0～22、25、29のいずれかの使用を推奨します。
+ライブラリ製作元様のHATを使用する場合は送信10、受信2です。
+
+2026/5/29
 ir_sendでパルスデータにタプルを使用可能にしました。これで処理が軽量化するはず。
