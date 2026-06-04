@@ -13,9 +13,9 @@ Raspberry Pi Pico2W で赤外線リモコンを扱うため、
 
 ライブラリは、Indoor Corgi 様が公開されている以下のファイルを利用しています：
 
-・infrared.h（アレンジ元として利用。実際のbuildにはinfrared_ext.hを使用しています。）
+・infrared.h（アレンジ元として利用。実際のbuildにはinfrared_ext.hを使用）
 
-・infrared.c（同上。実際のbuildにはinfrared_ext.cを使用しています。）
+・infrared.c（同上。実際のbuildにはinfrared_ext.cを使用）
 
 ・infrared.pio.h（ビルド時に生成される）
 
