@@ -2,17 +2,17 @@
 
 Hardware Used 
 
-  RPZ-IR-Sensor Rev2 (Indoor Corgi)
+・RPZ-IR-Sensor Rev2 (Indoor Corgi)
 
-  RPP-HAT-Adapter
+・RPP-HAT-Adapter
 
 Libraries Used This firmware incorporates the following files published by Indoor Corgi:
 
-  infrared.h (used as the original reference; the actual build uses infrared_ext.h)
+・infrared.h (used as the original reference; the actual build uses infrared_ext.h)
 
-  infrared.c (same as above; the actual build uses infrared_ext.c)
+・infrared.c (same as above; the actual build uses infrared_ext.c)
 
-  infrared.pio.h (generated during build)
+・infrared.pio.h (generated during build)
 
 All copyrights belong to the original creators.
 
@@ -32,11 +32,11 @@ Flash the generated firmware.uf2 onto your Pico2W to enable IR transmission and 
 
 📡 Usage Refer to the sample scripts in the sample folder:
 
-ir_receive.py — IR signal reception
+・ir_receive.py — IR signal reception
 
-ir_send.py — IR signal transmission
+・ir_send.py — IR signal transmission
 
-ir_learning_remote.py — Learning remote controller
+・ir_learning_remote.py — Learning remote controller
 
 SW1: Receive mode
 
@@ -48,7 +48,7 @@ Data is saved as JSON
 
 Useful for collecting raw pulse data
 
-aircon_ir_node, pulses.py
+・aircon_ir_node
 
 Wi-Fi–controlled air conditioner remote
 
