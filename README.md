@@ -60,7 +60,9 @@ See the README inside the aircon_ir_node folder for details
 
 https://youtu.be/CiHwa2uEGL8?si=j78sp6HAiGvLg5oV
 
-🧩 About the Firmware This firmware is based on MicroPython v1.29.0-preview.259, with the IR transmission/reception module (infrared.c / infrared.h) integrated for the Raspberry Pi Pico2W (RP2350).
+🧩 About the Firmware
+
+This firmware is based on MicroPython v1.29.0-preview.259, with the IR transmission/reception module (infrared.c / infrared.h) integrated for the Raspberry Pi Pico2W (RP2350).
 
 By enabling direct IR control from MicroPython, implementing IR remote functions becomes significantly easier.
 
