@@ -115,6 +115,7 @@ def index():
         <h2>エアコン操作パネル</h2>
         <p id="msg" style="color: green; font-weight: bold;"></p>
 
+        <button onclick="send('DRY25')">❄ 除湿 25℃</button><br><br>
         <button onclick="send('COOL25')">❄ 冷房 25℃</button><br><br>
         <button onclick="send('HEAT25')">🔥 暖房 25℃</button><br><br>
         <button onclick="send('FANLOW')">🍃 送風 微風</button><br><br>
