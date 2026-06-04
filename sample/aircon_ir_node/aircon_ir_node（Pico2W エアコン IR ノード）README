@@ -51,11 +51,11 @@ Zero2W や Raspberry Pi OS 側から Pico2W に TCP 接続するため、
 
 pulses.py には、エアコンの赤外線パルスデータを以下のように記述します：
 
-ir_cool27 = [...]
+ir_cool27 = (...)
 
-ir_heat25 = [...]
+ir_heat25 = (...)
 
-ir_off = [...]
+ir_off = (...)
 
 これらの配列には、ir_receive.py で受信したパルスデータをそのまま貼り付けてください。
 
