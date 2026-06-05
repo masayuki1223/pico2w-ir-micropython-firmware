@@ -4,27 +4,27 @@ import json
 import os
 from machine import Pin
 
-# --- GPIO 設定 ---
+# --- GPIO setup ---
 btn_recv = Pin(8, Pin.IN, Pin.PULL_UP)
 btn_send = Pin(9, Pin.IN, Pin.PULL_UP)
 
-led_green  = Pin(3, Pin.OUT)     # 受信中
-led_bule   = Pin(7, Pin.OUT)     # 受信成功
-led_white  = Pin(6, Pin.OUT)     # 未使用
-led_yellow = Pin(28, Pin.OUT)    # エラー点滅
+led_green  = Pin(3, Pin.OUT)     # Receiving
+led_bule   = Pin(7, Pin.OUT)     # Receive success
+led_white  = Pin(6, Pin.OUT)     # Unused
+led_yellow = Pin(28, Pin.OUT)    # Error blink
 
 led_green.off()
 led_bule.off()
 led_white.off()
 led_yellow.off()
 
-# --- IR 初期化 ---
-ir.init(10, 2) # 送信ピン 10、受信ピン 2
+# --- IR initialization ---
+ir.init(10, 2)  # TX pin 10, RX pin 2
 
-# --- 保存ファイル名 ---
+# --- Save file name ---
 FILENAME = "learned.json"
 
-# 起動時に JSON が存在するかチェック
+# Check if saved JSON exists at startup
 if FILENAME in os.listdir():
     print("Found existing data")
     for _ in range(4):
@@ -33,7 +33,7 @@ if FILENAME in os.listdir():
         led_bule.on()
         time.sleep(0.2)
 
-# --- エラー点滅 ---
+# --- Error blink ---
 def blink_error():
     for _ in range(3):
         led_yellow.on()
@@ -41,14 +41,12 @@ def blink_error():
         led_yellow.off()
         time.sleep(0.2)
 
-
-# --- RAW データ保存 ---
+# --- Save RAW data ---
 def save_raw(pulses):
     with open(FILENAME, "w") as f:
         json.dump({"raw": pulses}, f)
 
-
-# --- RAW データ読み込み ---
+# --- Load RAW data ---
 def load_raw():
     try:
         with open(FILENAME) as f:
@@ -57,20 +55,19 @@ def load_raw():
     except:
         return None
 
-
-# --- メインループ ---
+# --- Main loop ---
 print("Ready. Press GPIO8 to learn, GPIO9 to send.")
 
 while True:
 
-    # --- 受信ボタン ---
+    # --- Receive button ---
     if btn_recv.value() == 0:
         print("Receive mode start")
         led_green.on()
         led_bule.off()
 
-        # 受信開始
-        pulses = ir.receive()  # IndoorCorgi の receive
+        # Start receiving
+        pulses = ir.receive()  # IndoorCorgi receive
 
         led_green.off()
 
@@ -82,11 +79,11 @@ while True:
             print("Receive failed")
             blink_error()
 
-        # ボタン離すまで待つ
+        # Wait until button is released
         while btn_recv.value() == 0:
             time.sleep(0.05)
 
-    # --- 送信ボタン ---
+    # --- Send button ---
     if btn_send.value() == 0:
         print("Send mode start")
 
@@ -99,7 +96,7 @@ while True:
             print("No data")
             blink_error()
 
-        # ボタン離すまで待つ
+        # Wait until button is released
         while btn_send.value() == 0:
             time.sleep(0.05)
 
