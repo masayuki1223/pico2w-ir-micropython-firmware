@@ -80,7 +80,7 @@ By enabling direct IR control from MicroPython, implementing IR remote functions
 
 Added support for selecting GPIO pin numbers during initialization.
 
-Recommended pins for both TX and RX: GPIO 0–22, 25, 29.
+Recommended pins for both TX and RX: GPIO 0–22
 
 When using the original HAT from the library author, use TX=10, RX=2.
 
