@@ -11,13 +11,12 @@ PICO_IR_IP = "192.168.0.203"
 PICO_IR_TCP_PORT = 5000
 
 # -----------------------------
-#  Ping 判定
+#  Ping check
 # -----------------------------
 def ping_check(ip, timeout=5):
     """
-    5秒以内に ping 応答があれば True
-    応答が無ければ False
-    Windows / Linux 両対応
+    Return True if ping responds within 5 seconds.
+    Works on both Windows and Linux.
     """
     param = "-n" if platform.system().lower() == "windows" else "-c"
     start = time.time()
@@ -39,15 +38,15 @@ def ping_check(ip, timeout=5):
 
 def pico_ready(ip):
     """
-    Pico2W が TCP を受けられる状態か判定する。
-    ping が返る → Wi-Fi ON、Pico2W受信可能 → True
-    ping が返らない → Wi-Fi OFF、Pico2Wが落ちてる → False
+    Determine whether Pico2W is ready to receive TCP.
+    Ping OK → Wi-Fi ON, Pico2W ready → True
+    Ping NG → Wi-Fi OFF or Pico2W down → False
     """
     return ping_check(ip, timeout=5)
 
 
 # -----------------------------
-#  TCP 送信（判定は外側で行う）
+#  TCP send (readiness is checked outside)
 # -----------------------------
 def send_ir_tcp(cmd):
     msg = f"IR:{cmd}".encode()
@@ -69,19 +68,20 @@ def send_ir_tcp(cmd):
 
 
 # -----------------------------
-#  API: エアコン操作
+#  API: Air conditioner control
 # -----------------------------
 @app.get("/aircon/send")
 def aircon_send(cmd: str):
 
-    # ① Pico2W が受信可能か判定
+    # 1. Check if Pico2W is ready
     if not pico_ready(PICO_IR_IP):
         return {"status": "NOT_READY", "cmd": cmd}
 
-    # ② TCP 送信
+    # 2. TCP send
     resp = send_ir_tcp(cmd)
 
     return {"status": resp, "cmd": cmd}
+
 
 @app.get("/")
 def index():
@@ -89,7 +89,7 @@ def index():
         <!doctype html>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Air conditioner operation screen</title>
+        <title>Air Conditioner Control Panel</title>
 
         <style>
         body {{
@@ -112,46 +112,48 @@ def index():
             background: #ddd;
         }}
         </style>
-        <h2>エアコン操作パネル</h2>
+
+        <h2>Air Conditioner Control Panel</h2>
         <p id="msg" style="color: green; font-weight: bold;"></p>
 
-        <button onclick="send('DRY25')">❄ 除湿 25℃</button><br><br>
-        <button onclick="send('COOL25')">❄ 冷房 25℃</button><br><br>
-        <button onclick="send('HEAT25')">🔥 暖房 25℃</button><br><br>
-        <button onclick="send('FANLOW')">🍃 送風 微風</button><br><br>
-        <button onclick="send('OFF')">⛔ 停止</button><br><br>
+        <button onclick="send('DRY25')">💧 Dry Mode 25°C</button><br><br>
+        <button onclick="send('COOL25')">❄ Cool 25°C</button><br><br>
+        <button onclick="send('HEAT25')">🔥 Heat 25°C</button><br><br>
+        <button onclick="send('FANLOW')">🍃 Fan (Low)</button><br><br>
+        <button onclick="send('OFF')">⛔ Power Off</button><br><br>
 
         <script>
         const msg = document.getElementById("msg");
 
         function send(cmd) {{
-            msg.style.color = "black"
-            msg.textContent = "送信中…";  // 送信開始表示
+            msg.style.color = "black";
+            msg.textContent = "Sending…";  // Sending start
+
             fetch("/aircon/send?cmd=" + cmd)
                 .then(r => r.json())
                 .then(j => {{
 
                     if (j.status === "NOT_READY") {{
                         msg.style.color = "red";
-                        msg.textContent = "Pico2W から応答がありません";
+                        msg.textContent = "No response from Pico2W.";
                         return;
                     }}
 
                     if (j.status === "BUSY") {{
                         msg.style.color = "orange";
-                        msg.textContent = "Pico2W が処理中です…";
+                        msg.textContent = "Pico2W is busy…";
                         return;
                     }}
 
                     if (j.status === "ERROR") {{
                         msg.style.color = "red";
-                        msg.textContent = "通信エラーが発生しました";
+                        msg.textContent = "Communication error occurred.";
                         return;
                     }}
-                        
+
                     if (j.status === "OK") {{
                         msg.style.color = "green";
-                        msg.textContent = "送信完了！";
+                        msg.textContent = "Command sent successfully!";
                         setTimeout(() => msg.textContent = "", 3000);
                         return;
                     }}
