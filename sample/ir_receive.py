@@ -1,14 +1,14 @@
 import ir
 import time
 
-ir.init(10, 2)  # 初期化、送信ピン 10、受信ピン 2
+ir.init(10, 2)  # Initialize: TX pin 10, RX pin 2
 
-print("IR receive test: ボタンを押してください")
+print("IR receive test: Press a button on the remote")
 
 while True:
     pulses = ir.receive()
     if pulses:
         print("RAW:", pulses)
-        print("len =", len(pulses))
+        print("Length =", len(pulses))
         break
     time.sleep(0.05)
